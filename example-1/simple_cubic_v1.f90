@@ -1,4 +1,4 @@
-program cubic_xyz_density
+program main
    implicit none
 
    ! Variable declarations
@@ -46,4 +46,4 @@ program cubic_xyz_density
    print *, 'XYZ file "cubic_argon.xyz" has been generated with', n_atoms, 'atoms'
    print *, 'Calculated lattice constant:', lattice_constant, 'A'
 
-end program cubic_xyz_density
+end program main

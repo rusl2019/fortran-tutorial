@@ -1,4 +1,4 @@
-program cubic_xyz_density
+program main
    implicit none
 
    ! Variable declarations
@@ -107,4 +107,4 @@ contains
       end if
    end subroutine optimize_lattice
 
-end program cubic_xyz_density
+end program main
