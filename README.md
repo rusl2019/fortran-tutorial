@@ -10,7 +10,7 @@ Before you start, make sure you have:
 - A code editor or IDE (such as VS Code, Emacs, or an integrated terminal)
 
 ## Installation
-To compile and run Fortran programs, install a Fortran compiler such as GFortran:
+You must have a Fortran compiler installed on your system to compile and run this program. If you don't have one, you can install the GNU Fortran compiler, which is part of the GNU Compiler Collection (GCC).
 
 ### On Linux (Ubuntu/Debian)
 ```sh
@@ -18,12 +18,13 @@ sudo apt update && sudo apt install gfortran
 ```
 
 ### On macOS
+You can install gfortran using Homebrew or MacPorts.
 ```sh
 brew install gcc
 ```
 
 ### On Windows
-Download and install [MinGW-w64](https://www.mingw-w64.org/) or use Windows Subsystem for Linux (WSL) with a Linux distribution.
+You can get native binaries [here](https://www.equation.com/servlet/equation.cmd?fa=fortran) or use Windows Subsystem for Linux (WSL) with a Linux distribution (Recommended).
 
 ## Writing Your First Fortran Program
 Create a new file called `hello.f90` and add the following code:
