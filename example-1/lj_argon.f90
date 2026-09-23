@@ -82,35 +82,43 @@ contains
     ! =====================================================================
     ! FUNCTION: Menghitung energi potensial total Lennard-Jones
     ! =====================================================================
-    function compute_lj_energy(n_atoms, x, y, z) result(total_energy)
+    function compute_lj_energy(n_atoms, x, y, z, Lx, Ly, Lz, rcut) result(total_energy)
         integer, intent(in) :: n_atoms
         real(dp), intent(in) :: x(:), y(:), z(:)
+        real(dp), intent(in) :: Lx, Ly, Lz, rcut
         real(dp) :: total_energy
-
+    
         integer :: i, j
         real(dp) :: dx, dy, dz, r2, r2_inv, r6_inv, r12_inv, pair_energy
-
+        real(dp) :: rcut2
+    
+        rcut2 = rcut * rcut
         total_energy = 0.0_dp
-
-        ! Loop interaksi antar-pasangan (i < j)
+    
         do i = 1, n_atoms - 1
             do j = i + 1, n_atoms
-
+    
+                ! --- Minimum Image Convention ---
                 dx = x(i) - x(j)
                 dy = y(i) - y(j)
                 dz = z(i) - z(j)
-
+    
+                dx = dx - Lx * nint(dx / Lx)
+                dy = dy - Ly * nint(dy / Ly)
+                dz = dz - Lz * nint(dz / Lz)
+    
                 r2 = dx*dx + dy*dy + dz*dz
-
-                if (r2 > 0.0_dp) then
-                    r2_inv = (sigma * sigma) / r2
-                    r6_inv = r2_inv * r2_inv * r2_inv
+    
+                ! --- Cutoff ---
+                if (r2 < rcut2 .and. r2 > 0.0_dp) then
+                    r2_inv  = (sigma * sigma) / r2
+                    r6_inv  = r2_inv * r2_inv * r2_inv
                     r12_inv = r6_inv * r6_inv
-
+    
                     pair_energy = 4.0_dp * epsilon * (r12_inv - r6_inv)
                     total_energy = total_energy + pair_energy
                 end if
-
+    
             end do
         end do
     end function compute_lj_energy
