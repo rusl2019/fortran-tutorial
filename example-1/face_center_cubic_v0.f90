@@ -36,8 +36,7 @@ program main
 
    ! Write XYZ header with box dimensions
    write(10, '(I5)') n_atoms
-   write(10, '(A,F6.4,A,F6.4,A,3F10.4)') 'Optimized FCC argon lattice: density=', density, &
-      ' g/cm³, a=', lattice_constant, ' A, Lx Ly Lz=', lx, ly, lz
+   write(10, '(3F10.4)') lx, ly, lz
 
    ! Generate and write FCC coordinates
    call generate_fcc(lattice_size, lattice_constant, atom_type)

@@ -5,10 +5,12 @@ program lj_energy_argon
     integer, parameter :: dp = selected_real_kind(15, 307)
     real(dp), parameter :: sigma = 3.405_dp       ! dalam Angstrom
     real(dp), parameter :: epsilon = 0.996_dp     ! dalam kJ/mol
+    real(dp), parameter :: rcut = 2.5_dp * sigma  ! dalam Angstrom
 
     ! Variabel utama
     character(len=100) :: filename
     integer :: n_atoms
+    real(dp) :: lx, ly, lz
     real(dp), allocatable :: x(:), y(:), z(:)
     real(dp) :: total_energy
     logical :: success
@@ -18,11 +20,11 @@ program lj_energy_argon
     read *, filename
 
     ! 2. Panggil subroutine untuk membaca data
-    call read_xyz_file(filename, x, y, z, n_atoms, success)
+    call read_xyz_file(filename, x, y, z, n_atoms, lx, ly, lz, success)
     if (.not. success) stop
 
     ! 3. Panggil function untuk kalkulasi energi
-    total_energy = compute_lj_energy(n_atoms, x, y, z)
+    total_energy = compute_lj_energy(n_atoms, x, y, z, lx, ly, lz, rcut)
 
     ! 4. Tampilkan Hasil
     print *, "========================================="
@@ -30,6 +32,7 @@ program lj_energy_argon
     print *, "========================================="
     print '(A, I6)', " Jumlah Atom Argon : ", n_atoms
     print '(A, F15.4, A)', " Energi Potensial  : ", total_energy, " kJ/mol"
+    print '(A, F15.4, A)', " Energi Potensial / Atom  : ", total_energy/n_atoms, " kJ/mol"
     print *, "========================================="
 
     ! Bersihkan memori sebelum selesai
@@ -40,9 +43,10 @@ contains
     ! =====================================================================
     ! SUBROUTINE: Membaca file koordinat XYZ
     ! =====================================================================
-    subroutine read_xyz_file(filename, x, y, z, n_atoms, success)
+    subroutine read_xyz_file(filename, x, y, z, n_atoms, lx, ly, lz, success)
         character(len=*), intent(in) :: filename
         real(dp), allocatable, intent(out) :: x(:), y(:), z(:)
+        real(dp), intent(out) :: lx, ly, lz
         integer, intent(out) :: n_atoms
         logical, intent(out) :: success
 
@@ -65,7 +69,7 @@ contains
 
         ! Proses membaca
         read(10, *) n_atoms
-        read(10, *) comment_line
+        read(10, *) lx, ly, lz
 
         ! Alokasi array secara dinamis
         allocate(x(n_atoms), y(n_atoms), z(n_atoms))
